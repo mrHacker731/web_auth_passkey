@@ -34,9 +34,10 @@
 
       const result = await response.json();
       const {id} = result;
-
+      
+      const url = new URL(window.location)
       window.location.replace(
-        `http://localhost:3000/profile.html?userId=${id}`
+        `${url.origin}/profile.html?userId=${id}`
       );
     });
   </script>
