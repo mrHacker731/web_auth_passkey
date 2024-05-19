@@ -90,7 +90,7 @@ app.post("/login-challenge", async (req, res) => {
   const user = userStore[userId];
 
   const opt = await generateAuthenticationOptions({
-    rpID: "localhost",
+    rpID: "https://web-auth-passkey.onrender.com",
   });
 
   challengeStore[userId] = opt.challenge;
