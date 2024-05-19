@@ -45,7 +45,7 @@ app.post("/register-challenge", async (req, res) => {
   const user = userStore[userId];
 
   const challengePayload = await generateRegistrationOptions({
-    rpID: "web-auth-passkey",
+    rpID: "https://web-auth-passkey.onrender.com",
     rpName: "My Localhost Machine",
     attestationType: "none",
     userName: user.username,
@@ -70,7 +70,7 @@ app.post("/register-verify", async (req, res) => {
   const verificationResult = await verifyRegistrationResponse({
     expectedChallenge: challenge,
     expectedOrigin: "https://web-auth-passkey.onrender.com",
-    expectedRPID: "web-auth-passkey",
+    expectedRPID: "https://web-auth-passkey.onrender.com",
     response: cred,
   });
 
@@ -107,8 +107,8 @@ app.post('/login-verify', async (req, res) => {
 
     const result = await verifyAuthenticationResponse({
         expectedChallenge: challenge,
-        expectedOrigin: 'https://web-auth-passkey.onrender.com/',
-        expectedRPID: 'web-auth-passkey',
+        expectedOrigin: 'https://web-auth-passkey.onrender.com',
+        expectedRPID: 'https://web-auth-passkey.onrender.com',
         response: cred,
         authenticator: user.passkey
     })
