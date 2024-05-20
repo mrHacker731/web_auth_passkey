@@ -18,7 +18,6 @@ app.use(express.json());
 const userStore = {};
 const challengeStore = {};
 
-
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
   const id = `user_${Date.now()}`;
@@ -31,7 +30,7 @@ app.post("/register", (req, res) => {
 
   userStore[id] = user;
 
-  console.log(`Register successfull`, userStore[id]);
+  console.log(`Register successful`, userStore[id]);
 
   return res.json({ id });
 });
@@ -45,8 +44,8 @@ app.post("/register-challenge", async (req, res) => {
   const user = userStore[userId];
 
   const challengePayload = await generateRegistrationOptions({
-    rpID: "https://web-auth-passkey.onrender.com",
-    rpName: "My Localhost Machine",
+    rpID: "web-auth-passkey.onrender.com",  // No https:// here
+    rpName: "My Render Deployed App",
     attestationType: "none",
     userName: user.username,
     timeout: 30_000,
@@ -57,7 +56,7 @@ app.post("/register-challenge", async (req, res) => {
   return res.json({ options: challengePayload });
 });
 
-// verify regester
+// verify register
 app.post("/register-verify", async (req, res) => {
   const { userId, cred } = req.body;
 
@@ -69,8 +68,8 @@ app.post("/register-verify", async (req, res) => {
 
   const verificationResult = await verifyRegistrationResponse({
     expectedChallenge: challenge,
-    expectedOrigin: "https://web-auth-passkey.onrender.com",
-    expectedRPID: "https://web-auth-passkey.onrender.com",
+    expectedOrigin: "https://web-auth-passkey.onrender.com",  // Include https:// here
+    expectedRPID: "web-auth-passkey.onrender.com",  // No https:// here
     response: cred,
   });
 
@@ -90,7 +89,7 @@ app.post("/login-challenge", async (req, res) => {
   const user = userStore[userId];
 
   const opt = await generateAuthenticationOptions({
-    rpID: "https://web-auth-passkey.onrender.com",
+    rpID: "web-auth-passkey.onrender.com",  // No https:// here
   });
 
   challengeStore[userId] = opt.challenge;
@@ -107,8 +106,8 @@ app.post('/login-verify', async (req, res) => {
 
     const result = await verifyAuthenticationResponse({
         expectedChallenge: challenge,
-        expectedOrigin: 'https://web-auth-passkey.onrender.com',
-        expectedRPID: 'https://web-auth-passkey.onrender.com',
+        expectedOrigin: 'https://web-auth-passkey.onrender.com',  // Include https:// here
+        expectedRPID: 'web-auth-passkey.onrender.com',  // No https:// here
         response: cred,
         authenticator: user.passkey
     })
@@ -118,8 +117,6 @@ app.post('/login-verify', async (req, res) => {
     // Login the user: Session, Cookies, JWT
     return res.json({ success: true, userId })
 })
-
-
 
 const port = 3000;
 app.listen(port, () => {
